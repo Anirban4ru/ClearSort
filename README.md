@@ -1,84 +1,150 @@
+<div align="center">
+
 # ClearSort
 
-### A calm, safe way to bring order to your Windows files.
+### File order, without the anxiety.
 
-ClearSort is a Windows desktop utility for organizing loose files and isolating exact duplicates without destructive cleanup. Select up to five folders, review what will happen, and keep full control over every file movement.
+ClearSort is a Windows desktop utility for turning scattered folders into a
+predictable file system — while keeping every destructive decision in your
+hands.
 
-> **Nothing is permanently deleted.** Exact duplicates are moved to a clearly named quarantine folder so you can review them before removing anything yourself.
+<br />
 
-## Why ClearSort
+**Organize by type · Compare across folders · Quarantine safely**
 
-Most file-cleanup tools make a destructive promise: scan, delete, hope. ClearSort takes the safer approach:
+<br />
 
-- **Organize by intent** — files are placed into `Photos`, `Videos`, `Documents`, or `Others`.
-- **Keep file types discoverable** — each category is split into extension folders such as `Photos/JPG` or `Documents/PDF`.
-- **Compare across folders** — scan up to five selected folders in one workspace.
-- **Quarantine, never destroy** — duplicates move to `Duplicates_To_Delete` inside their original source folder.
-- **Stay recoverable** — original relative paths are preserved inside quarantine folders.
-- **See every outcome** — progress, errors, moved counts, and activity are visible in the app.
+[Get started](#get-started) · [How it works](#how-it-works) · [Safety contract](#safety-contract)
 
-## Features
+</div>
 
-### Structured organization
+---
 
-ClearSort uses a predictable destination structure:
+## The short version
+
+ClearSort is built for the moment when a folder has become too important,
+too large, or too messy to clean manually.
+
+Select up to **five folders**, choose an operation, and let ClearSort do the
+repetitive work:
+
+| Operation | Result |
+| --- | --- |
+| **Sort files** | Routes loose files into category and extension folders |
+| **Find duplicates** | Compares file contents across all selected folders |
+| **Review safely** | Moves duplicates into `Duplicates_To_Delete` instead of deleting them |
+
+There is no automatic purge, no overwrite-by-default behavior, and no opaque
+"clean everything" button.
+
+> **ClearSort moves files. It does not permanently delete them.**
+
+## Why it exists
+
+Most cleanup tools optimize for speed by making the final decision for you.
+ClearSort optimizes for **confidence**.
+
+- A predictable destination is better than a clever one.
+- A visible quarantine is better than an irreversible delete.
+- A clear activity log is better than a silent success message.
+- A reversible file move is better than a recovery problem.
+
+The product is intentionally small, focused, and explicit.
+
+## What you can do
+
+### 01 — Create a file system you can navigate
+
+Loose files are classified into a stable structure:
 
 ```text
 Selected folder/
 ├── Photos/
 │   ├── JPG/
-│   └── PNG/
+│   ├── PNG/
+│   └── HEIC/
 ├── Videos/
-│   └── MP4/
+│   ├── MP4/
+│   └── MOV/
 ├── Documents/
-│   └── PDF/
+│   ├── PDF/
+│   ├── DOCX/
+│   └── XLSX/
 └── Others/
-    └── ZIP/
+    ├── ZIP/
+    └── NO_EXTENSION/
 ```
 
-The original file name is retained. If a destination already contains that name, ClearSort creates a numbered alternative such as `report (2).pdf` instead of overwriting anything.
+The original filename is preserved. When a destination already contains the
+same name, ClearSort creates a numbered alternative such as
+`report (2).pdf`; it does not overwrite the existing file.
 
-### Exact duplicate detection
+### 02 — Find exact copies, not guesses
 
-Duplicate detection uses SHA-256 hashes and reads files in 1 MB chunks. Files with identical content are grouped together; the first deterministic match is retained and the remaining copies are moved to:
+Duplicate detection is content-based. ClearSort hashes files with SHA-256 in
+1 MB chunks, groups matching content, keeps the first deterministic match,
+and moves the remaining copies for review.
 
 ```text
-<source folder>/Duplicates_To_Delete/
+<source folder>/
+└── Duplicates_To_Delete/
+    └── original-relative-path/
+        └── duplicate-file.ext
 ```
 
-Existing quarantine folders are excluded from future scans, so repeated runs do not re-process the same files.
+The original relative path is retained inside quarantine. Existing quarantine
+folders are excluded from future scans, so a second run does not repeatedly
+process the same moved files.
 
-### Multi-folder workspace
+### 03 — Compare folders as one workspace
 
-Choose a parent folder, then select up to five child folders together using:
+Use the folder-group picker to select child folders together:
 
-- `Ctrl + Click` for individual folders
-- `Shift + Click` for a range
-- **Select all** and **Clear** controls
+- `Ctrl + Click` — select individual folders
+- `Shift + Click` — select a range
+- **Select all** — select the visible folder set
+- **Clear** — reset the selection
 
-ClearSort rejects duplicate selections and overlapping folders before any scan begins.
+ClearSort accepts a maximum of five folders and rejects duplicate or
+overlapping selections before any file operation starts.
 
-## Safety model
+## Safety contract
 
-ClearSort is designed around reversible operations:
+ClearSort is designed around a simple rule: **the app should never make a
+destructive decision on your behalf.**
 
-1. No automatic deletion.
-2. No overwriting of existing files.
-3. Permission and move failures are surfaced in the activity log.
-4. Duplicate quarantine keeps source-relative paths.
-5. Existing managed folders are excluded from source scans.
+| Guarantee | Behavior |
+| --- | --- |
+| No permanent deletion | Duplicates are moved to quarantine |
+| No silent overwrite | Name collisions receive numbered filenames |
+| No hidden failures | Move and permission errors appear in the activity log |
+| No repeat quarantine scans | Managed folders are excluded from scanning |
+| No frozen interface | File work runs in background worker threads |
+| No unsafe folder API | Folder selection uses standard Windows dialogs plus a safe in-app multi-select view |
 
-Always review `Duplicates_To_Delete` before removing files, especially when working with synchronized or shared folders.
+Review `Duplicates_To_Delete` before removing anything, especially when
+working inside OneDrive, network shares, or synchronized folders.
 
-## Run on Windows
+## Get started
 
-### Recommended
+### Fastest path — Windows
 
-Double-click [`start.bat`](./start.bat). It creates a local virtual environment, installs the dependency, and launches ClearSort.
+1. Download or clone this repository.
+2. Double-click [`start.bat`](./start.bat).
+3. Choose a folder group.
+4. Select up to five child folders.
+5. Run **Sort files** or **Find duplicates**.
+6. Review the activity log and quarantine folders before taking any further action.
 
-### Manual
+`start.bat` creates a local virtual environment, installs the runtime
+dependency, and launches ClearSort.
+
+### Run from PowerShell
 
 ```powershell
+git clone https://github.com/Anirban4ru/DupeCleaner-Pro.git
+cd DupeCleaner-Pro
+
 py -3 -m venv .venv
 .venv\Scripts\python.exe -m pip install -r requirements.txt
 .venv\Scripts\python.exe main.py
@@ -90,37 +156,77 @@ py -3 -m venv .venv
 - Python 3.10 or newer
 - CustomTkinter 5.2.2 or newer
 
-## Project structure
+## Product surface
+
+ClearSort is intentionally a native-feeling desktop tool rather than a web
+dashboard:
+
+- Dark, low-distraction workspace UI
+- Persistent source-folder rail
+- Visible operation status and progress
+- Activity log with timestamps
+- Explicit success, warning, and error states
+- Responsive background processing
+- Safe filename collision handling
+
+## Technical profile
+
+| Layer | Choice |
+| --- | --- |
+| Runtime | Python |
+| Desktop UI | Tkinter + CustomTkinter |
+| Duplicate identity | SHA-256 content hash |
+| File movement | `pathlib` + `shutil` |
+| Responsiveness | Background worker threads |
+| Distribution entry point | Windows `start.bat` |
+
+The implementation deliberately avoids manual COM vtable or pointer
+manipulation for folder selection. Reliability is more important than
+pretending that a standard Windows folder dialog supports a feature it does
+not provide.
+
+## Repository layout
 
 ```text
 ClearSort/
-├── main.py           # Desktop application
-├── requirements.txt  # Runtime dependency
-├── start.bat         # Windows launcher
+├── main.py
+├── requirements.txt
+├── start.bat
 ├── .gitignore
 └── README.md
 ```
 
-## Development notes
-
-The application uses:
-
-- Python
-- Tkinter
-- CustomTkinter
-- SHA-256 content hashing
-- Background worker threads for file operations
-
-File operations run away from the UI thread so the interface remains responsive during larger scans. The project intentionally avoids unsafe native COM pointer manipulation for folder selection.
-
 ## Roadmap
 
-- Windows installer package
-- Dry-run preview before moving files
-- Undo history for the latest operation
-- Larger-folder scan performance improvements
-- Optional custom category rules
+The next product-quality steps are:
+
+- Preview mode before moving files
+- Undo for the latest operation
+- Windows installer and signed release builds
+- Configurable category and extension rules
+- Improved progress reporting for very large trees
+- Automated regression coverage for file-operation edge cases
+
+## Contributing
+
+Keep changes conservative around file operations. Any contribution that moves
+or classifies files should include:
+
+1. A clear description of the behavior change.
+2. Explicit handling for permissions, collisions, and partial failure.
+3. A test or reproducible verification path.
+4. Documentation updates when the user-facing behavior changes.
 
 ## License
 
-License terms have not yet been selected. Add a license before distributing ClearSort publicly.
+No open-source license has been selected yet. Until a license is added, the
+repository should be treated as **all rights reserved** and not redistributed
+as a packaged product.
+
+---
+
+<div align="center">
+
+**ClearSort** — make order visible, keep control.
+
+</div>
