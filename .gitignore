@@ -1,17 +1,6 @@
-# Virtual Environments
 .venv/
-env/
-venv/
-
-# Python Cache
+.vs/
 __pycache__/
-*.pyc
+*.py[cod]
+.DS_Store
 
-# Build directories
-build/
-dist/
-*.spec
-
-# IDEs
-.vscode/
-.idea/
